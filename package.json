@@ -2,14 +2,18 @@
   "name": "edhirya-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/server.ts",
   "scripts": {
     "dev": "ts-node-dev src/server.ts | bunyan",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": "18.x"
+  },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/bunyan": "^1.8.11",
