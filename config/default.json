@@ -17,6 +17,10 @@
       "expiresIn": "30d",
       "secret": "767a0dd78bea8d5014aed829b657ad28313a47531bd3635ec4e4bce3d6d2c67e",
       "errorMessage": "jwt expired"
+    },
+    "passwordReset": {
+      "time": 10,
+      "unit": "minutes"
     }
   },
   "aws-s3": {

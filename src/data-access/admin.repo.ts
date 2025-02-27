@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 import {User} from "../models/user.model";
-import {Employee} from "../models/employee.model";
-import {IRole} from "../models/role.model";
+import {UserPWReset} from "../models/user.password.reset.model";
+import {hashPassword, validatePassword} from "../util/hash";
 const ObjectId = Types.ObjectId;
 
 
@@ -71,4 +71,27 @@ export const getLoggedUserRepo = async (id: any) => {
         },
     ]).exec();
 };
+export const findOneAndUpdateUserRepo = async (filters: any, data: any) => {
+    if (data.password) {
+        if (validatePassword(data.password)) {
+            data.password = await hashPassword(data.password);
+        } else {
+            throw {
+                pwdValid: false,
+                message:
+                    "Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter, and one digit.",
+            };
+        }
+    }
+    return User.findOneAndUpdate(filters, { $set: { ...data } }, { new: true }).exec();
+};
 
+export const createUserPwReset = (data: any, session?: any) => {
+    return new UserPWReset(data).save({ session });
+};
+export const findUserPwResetToken = (filters?: any) => {
+    return UserPWReset.findOne(filters).exec();
+};
+export const findUserPwResetTokenAndDelete = (filters?: any) => {
+    return UserPWReset.findOneAndDelete(filters).exec();
+};

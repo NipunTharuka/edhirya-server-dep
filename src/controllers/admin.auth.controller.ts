@@ -3,8 +3,8 @@ import { log } from "../util/logger";
 import {
     createUserService,
     getOneUserService,
-    logoutUserService,
-    signInUserService
+    logoutUserService, requestUserPasswordResetService,
+    signInUserService, validateAndUpdateUserPwService, validateUserPWResetTokenService
 } from "../services/admin.auth.service";
 import {validateRefreshTokenReq} from "../services/token.service";
 import {SETTINGS} from "../constants/commons.settings";
@@ -79,6 +79,39 @@ export const findOneUserController = async (req: any, res: any) => {
         log.info("Finding one user completed");
     } catch (e) {
         log.error(JSON.stringify(e));
+        return res.status(400).send(e);
+    }
+};
+export const requestUserPWResetController = async (req: any, res: any) => {
+    log.info("Requesting Reset Password");
+    try {
+        const data = await requestUserPasswordResetService(req.body.email, SETTINGS.USERS.ADMIN);
+        res.send(data);
+        log.info("Requesting Reset Password completed");
+    } catch (e) {
+        log.error(JSON.stringify(e));
+        return res.status(400).send(e);
+    }
+};
+
+export const validateUserPWResetTokenController = async (req: any, res: any) => {
+    log.info("Validating Reset Password");
+    try {
+        const data = await validateUserPWResetTokenService(req.body.token);
+        res.send(data);
+        log.info("Validating Reset Password completed");
+    } catch (e) {
+        return res.status(400).send(e);
+    }
+};
+export const updateUserPasswordController = async (req: any, res: any) => {
+    log.info("Resetting Password");
+    try {
+        const { token, password } = req.body;
+        const data = await validateAndUpdateUserPwService(token, password, SETTINGS.USERS.ADMIN);
+        res.send(data);
+        log.info("Resetting Password completed");
+    } catch (e) {
         return res.status(400).send(e);
     }
 };
