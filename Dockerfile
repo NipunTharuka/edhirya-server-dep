@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:20
 
 WORKDIR /app
 
@@ -14,9 +14,9 @@ RUN cp -R src/html-templates dist
 
 RUN npm install pm2 -g
 
-ENV PORT=3000
+ENV PORT=4009
 ENV NODE_ENV production
 
-EXPOSE 3000
+EXPOSE 4009
 
 CMD ["npm" ,"run", "prod:docker"]
